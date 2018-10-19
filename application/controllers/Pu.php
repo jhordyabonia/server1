@@ -723,6 +723,7 @@ class Pu extends CI_Controller {
 	}	
 	public function getAll($encrypt="encrypt")
 	{		
+		$a_buscar=null;
 		$publico= $this->input->post('publico');
 		$tmp['celular'] = $this->input->post('celular');
 		if($encrypt=="no_encrypt")		
