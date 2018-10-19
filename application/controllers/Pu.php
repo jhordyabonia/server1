@@ -759,6 +759,7 @@ class Pu extends CI_Controller {
 
 		if($all!=false)
 			$query['id >=']=$all[($page*100)]->id;
+		$data['pager']=(Object)array('data'=>0,'before'=>0,'after'=>0,'a_buscar'=>0);
 		$this->data['pager']->data=($page+1)."/".$count_tmp;
 		$this->data['pager']->before=($page<=0)?0:abs($page-1);
 		$this->data['pager']->after=$page+1;
