@@ -717,8 +717,9 @@ class Pu extends CI_Controller {
 	private function query($tabla,$asignatura,$callback)
 	{
 		$data_tabla=$this->$tabla->get_all(array('asignatura'=>$asignatura));
-		foreach($data_tabla as $value)
-			$this->data[$callback][]=$value;
+		if($data_tabla)
+			foreach($data_tabla as $value)
+				$this->data[$callback][]=$value;
 	}	
 	public function getAll($encrypt="encrypt")
 	{		
