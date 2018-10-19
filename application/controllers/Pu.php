@@ -712,6 +712,8 @@ class Pu extends CI_Controller {
 		}
 		//*/ $menssage="$action ,$table,".json_encode($data);
 		$output=(Object)array('menssage'=>$menssage,'data'=>$data,'action'=>$action);
+
+		$this->output->set_content_type('application/json');
 		return json_encode($output);
 	}
 	private function query($tabla,$asignatura,$callback)
