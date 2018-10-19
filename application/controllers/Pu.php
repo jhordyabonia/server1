@@ -173,7 +173,7 @@ class Pu extends CI_Controller {
 				$out->mensajes=$this->mensaje->get_all(array('chat'=>$id));
 				$out->fecha=$msj->fecha;
 				echo json_encode($out);
-			}else echo "Error agregando chat";
+			}else echo json_encode($chat);//"Error agregando chat";
 		}else if($action=="get")
 		{
 			$chat['estado <>']="-1";
