@@ -1,0 +1,3 @@
+123seller\seller
+
+waws-prod-sn1-047.ftp.azurewebsites.windows.net/

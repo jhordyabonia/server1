@@ -1,0 +1,37 @@
+=====================================================
+Congratulations, Softaculous was installed successfully
+Softaculous has been installed at:
+Path : /usr/local/vesta/softaculous
+Scripts Path : /var/softaculous
+
+We request you to please register for updates and notifications at :
+http://www.softaculous.com/board/index.php?act=register
+It also inspires us when you register. Registration is free and just a one minute job.
+
+If you need any support you can always count on us. Just drop in at our Support Board:
+http://www.softaculous.com/board
+Alternatively, you can contact us via Email at support@softaculous.com
+
+Thank you for using Softaculous
+=======================================================
+
+ _|      _|  _|_|_|_|    _|_|_|  _|_|_|_|_|    _|_|   
+ _|      _|  _|        _|            _|      _|    _| 
+ _|      _|  _|_|_|      _|_|        _|      _|_|_|_| 
+   _|  _|    _|              _|      _|      _|    _| 
+     _|      _|_|_|_|  _|_|_|        _|      _|    _| 
+
+
+Congratulations, you have just successfully installed Vesta Control Panel
+
+    https://35.168.10.93:8083
+    username: admin
+    password: UwBDwDb0In
+
+We hope that you enjoy your installation of Vesta. Please feel free to contact us anytime if you have any questions.
+Thank you.
+
+--
+Sincerely yours
+vestacp.com team
+
