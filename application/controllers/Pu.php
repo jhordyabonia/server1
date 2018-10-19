@@ -222,7 +222,7 @@ class Pu extends CI_Controller {
 
 		$messages=$this->mensaje->get_all(array('estado'=>-$usuario));
 		foreach($messages as $message)
-			$out->mensajes[]=$this->_output('get',$message->tipo,array('id'=>$message->dato));	
+			$out->mensajes[]=$this->output_('get',$message->tipo,array('id'=>$message->dato));	
 		
 		$this->mensaje->delete(array('estado'=>-$usuario));	
 		return $out;
@@ -612,7 +612,7 @@ class Pu extends CI_Controller {
 		$asignatura['codigo'] = $this->input->post('codigo');
 		$asignatura['creditos'] = $this->input->post('creditos');
 		$asignatura['nota'] = $this->input->post('nota');
-		echo $this->_output($action,'asignatura',$asignatura);
+		echo $this->output_($action,'asignatura',$asignatura);
 		/*
 		if($action==="edit") echo 0<($this->asignatura->update($asignatura,$id))?"Asignatura Actualizada::0":"Error en Actualizacion::0";
 		else 
@@ -628,7 +628,7 @@ class Pu extends CI_Controller {
 		$alerta['hora'] = $this->input->post('hora');
 		$alerta['alerta'] =  $action=="add"?1:$this->input->post('alerta');
 		$alerta['asignatura'] =$this->input->post('asignatura');
-		echo $this->_output($action,'alerta',$alerta);
+		echo $this->output_($action,'alerta',$alerta);
 		#if($action==="edit") echo 0<($this->alerta->update($alerta,$id))?"Alerta Actualizada::0":"Error en Actualizacion::0";
 		#else echo 0<($this->alerta->insert($alerta))?"Alerta Registrada::0":"Error de Registro::0";
 	}
@@ -640,7 +640,7 @@ class Pu extends CI_Controller {
 		$apunte['apunte'] = $this->input->post('apunte');
 		$apunte['fecha'] = $this->input->post('fecha');
 		$apunte['descripcion'] = $this->input->post('descripcion');
-		echo $this->_output($action,'apunte',$apunte);
+		echo $this->output_($action,'apunte',$apunte);
 		#if($action==="edit") echo 0<($this->apunte->update($apunte,$id))?"Apunte Actualizado::0":"Error en Actualizacion::0";
 		#else echo 0<($this->apunte->insert($apunte))?"Apuntes Guardados::0":"Error de Registro::0";
 	}
@@ -650,7 +650,7 @@ class Pu extends CI_Controller {
 		$lectura['nombre'] = $this->input->post('nombre');		
 		$lectura['id'] = $this->input->post('id');
 		$lectura['descripcion'] = $this->input->post('descripcion');
-		echo $this->_output($action,'lectura',$lectura);
+		echo $this->output_($action,'lectura',$lectura);
 		#if($action==="edit") echo 0<($this->lectura->update($lectura,$id))?"Lectura Actualizada::0":"Error en Actualizacion::0";
 		#else echo 0<($this->lectura->insert($lectura))?"lectura Registrada::0":"Error de Registro::0";
 	}
@@ -664,7 +664,7 @@ class Pu extends CI_Controller {
 		$calificable['porcentaje'] = $this->input->post('porcentaje');
 		$calificable['descripcion'] = $this->input->post('descripcion');
 
-		echo $this->_output($action,'calificable',$calificable);
+		echo $this->output_($action,'calificable',$calificable);
 		#if($action==="edit")  echo 0<($this->calificable->update($calificable,$id))?"Calificable Actualizado::0":"Error en Actualizacion::0";
 		#else echo 0<($this->calificable->insert($calificable))?"Calificable Registrado::0":"Error de Registro::0";
 	}
@@ -676,12 +676,12 @@ class Pu extends CI_Controller {
 		$horario['hora'] = $this->input->post('hora');
 		$horario['ubicacion'] = $this->input->post('ubicacion');
 		$horario['duracion'] = $this->input->post('duracion');
-		echo $this->_output($action,'horario',$horario);		
+		echo $this->output_($action,'horario',$horario);		
 		
 		#if($action==="edit") echo 0<($this->horario->update($horario,$id))?"Horario Actualizado::0":"Error en Actualizacion::0";
 		#else echo 0<($this->horario->insert($horario))?"Horario Registrado::0":"Error de Registro::0";
 	}
-	private function _output($action,$table,$data)
+	private function output_($action,$table,$data)
 	{
 		$out;$menssage="";
 		if($action==="get"){	
