@@ -1,4 +1,4 @@
 RewriteEngine on 
 
-RewriteCond $1 !^(index.php|phpmyadmin|pma|assets|img|js|css|uploads|magento|robots.txt)
+RewriteCond $1 !^(index.php|phpmyadmin|pma|assets|img|js|css|uploads|magento|robots.txt|*.php)
 RewriteRule ^(.*)$ index.php/$1 [L]
