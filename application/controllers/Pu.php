@@ -177,6 +177,7 @@ class Pu extends CI_Controller {
 		}else if($action=="get")
 		{
 			$chat['estado <>']="-1";
+			//$chat['id >']=$last_msj;
 			$mensajes=$this->mensaje->get_all($chat);
 			$tmp_ids=array();
 			foreach($mensajes as $mensaje)
@@ -193,7 +194,8 @@ class Pu extends CI_Controller {
 					$out[]=$t;
 					if($t->tipo!=0)
 						$this->mensaje->update(array('estado'=>1),$msj_);
-				}			
+				}	
+			$out[]=$this->update($chat);
 			echo json_encode($out);
 		}else if($action=="delete")
 		{
@@ -213,6 +215,17 @@ class Pu extends CI_Controller {
 				echo json_encode($out);
 			}else echo "Error en Actualizacion::0";
 		}
+	}
+	public function update($usuario){
+		$out=(Object)array('id'=>-1,'nombre'=>"",'descripcion'=>"",'tipo'=>"");
+		$out->fecha=date("Y\-m\-d h:i:s");	
+
+		$messages=$this->mensaje->get_all(array('estado'=>-$usuario));
+		foreach($messages as $message)
+			$out->mensajes[]=$this->_output('get',$message->tipo,array('id'=>$message->dato));	
+		
+		$this->mensaje->delete(array('estado'=>-$usuario));	
+		return $out;
 	}
 	public function chat_edit()
 	{
@@ -559,7 +572,12 @@ class Pu extends CI_Controller {
 		$usuario['universidad'] = $this->universidad->get(array('nombre'=>$u))->id;
 		if($usuario['universidad']==false)
 			$usuario['universidad'] = $this->universidad->insert(array('nombre'=>$u));
-		echo 0<$this->usuario->insert($usuario)?"Registro Exitoso!":"Error de registro";
+
+		$id=$this->usuario->insert($usuario);
+		$menssage = 0<$id?"Registro Exitoso!":"Error de registro";
+		$usuario['id']=$id;
+		$output=(Object)array('menssage'=>$menssage,'data'=>$usuario,'action'=>__METHOD__);
+		echo json_encode($output);
 	}
 	public function editar()
 	{
@@ -578,7 +596,13 @@ class Pu extends CI_Controller {
 		if($usuario['password']!=null)
 			$_usuario['password'] = md5($usuario['password']);
 		
-		echo 0<$this->usuario->update($_usuario,$id)?"Actualizacion Exitosa!":"";
+		$menssage = 0<$this->usuario->update($_usuario,$id)?"Actualizacion Exitosa!":"Error durante actualizacion";
+
+		$data=$this->usuario->get($id);
+		if($data)
+			$data->universidad=$this->universidad->get($data->universidad)->nombre;
+		$output=(Object)array('menssage'=>$menssage,'data'=>$data,'action'=>__METHOD__);
+		echo json_encode($output);
 	}
 	public function asignaturas($action="add")
 	{		
@@ -660,7 +684,9 @@ class Pu extends CI_Controller {
 	private function _output($action,$table,$data)
 	{
 		$out;$menssage="";
-		if($action==="delete"){	
+		if($action==="get"){	
+			$out=$this->$table->get($data['id']);
+		}if($action==="delete"){	
 			$out=$this->$table->delete($data['id']);
 			$out=$this->$table->get($data['id']);
 			if(!$out)$out=$data['id'];
