@@ -36,7 +36,7 @@ class Pu extends CI_Controller {
 		$this->universidad->insert(array('nombre'=>"Universidad Icesi"));
 		$this->universidad->insert(array('nombre'=>"Universidad Javeriana"));
 
-		$this->usuario->insert(array('nombre'=>"Academic Glider",'correo'=>"jeigl7@gmail.com",'celular'=>3158241412,'clave'=>md5("123456")));
+		$this->usuario->insert(array('nombre'=>"Academic Glider",'correo'=>"jeigl7@gmail.com",'celular'=>3158241412,'password'=>md5("123456")));
 	}
 	public function scrapp()
 	{ $this->leer_archivos_y_directorios();	}
@@ -286,9 +286,7 @@ class Pu extends CI_Controller {
 		$mensaje['tipo']=$this->input->post('tipo');
 		$mensaje['usuario']=$this->input->post('usuario');
 		$mensaje['dato']=$this->input->post('dato');
-		echo "<PRE>";
-		var_dump($mensaje);
-		die;
+	
 		$get=array('chat'=>$mensaje['chat'],'usuario'=>$mensaje['usuario'],'estado <>'=>-1);
 		if($this->mensaje->get($get)==false)
 		{
