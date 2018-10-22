@@ -114,7 +114,7 @@ class Pu extends CI_Controller {
 		  }else $id=$a->id;
 
 		  if(!$id)continue;
-		  
+
 		  echo "<br>".$this->horario->insert(
 			  array('asignatura'=>$id,
 					'dia'=>$h->dia,
@@ -422,6 +422,11 @@ class Pu extends CI_Controller {
 			$asignatura->nota="";
 			$asignatura->usuario=$usuario;
 			$id=$this->asignatura->insert($asignatura);
+
+			$asignatura->imagen = $this->findImg($asignatura->nombre);
+			$asignatura->descripcion=$this->getDescripcion($id);
+			if($asignatura->descripcion=="")
+				$asignatura->descripcion=$this->findText($asignatura->nombre);
 		}
 
 		foreach($this->data['horarios'] as $index => $data)
