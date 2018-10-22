@@ -286,7 +286,9 @@ class Pu extends CI_Controller {
 		$mensaje['tipo']=$this->input->post('tipo');
 		$mensaje['usuario']=$this->input->post('usuario');
 		$mensaje['dato']=$this->input->post('dato');
-
+		echo "<PRE>";
+		var_dump($mensaje);
+		die;
 		$get=array('chat'=>$mensaje['chat'],'usuario'=>$mensaje['usuario'],'estado <>'=>-1);
 		if($this->mensaje->get($get)==false)
 		{
