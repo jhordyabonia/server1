@@ -112,12 +112,16 @@ class Pu extends CI_Controller {
 				echo "<b> nueva</b> $id";
 			}else $id=$a->id;
 		  }else $id=$a->id;
-		 echo "<br>".$this->horario->insert(
+
+		  if(!$id)continue;
+		  
+		  echo "<br>".$this->horario->insert(
 			  array('asignatura'=>$id,
 					'dia'=>$h->dia,
 					'hora'=>$h->hora,
 					'duracion'=>$h->duracion,
-					'ubicacion'=>$h->ubicacion));
+					'ubicacion'=>$h->ubicacion)
+				);
 	  }
 	}
      
