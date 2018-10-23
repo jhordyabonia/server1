@@ -75,12 +75,12 @@ $active_group = 'default';
 $query_builder = TRUE;
 $active_record = TRUE;
 $db['default'] = array(
-    'dsn'      => 'sqlite:application/database/ventor.db',// path/to/database
-    'hostname' => '',
-    'username' => '',
-    'password' => '',
-    'database' => '',
-    'dbdriver' => 'pdo',
+    'dsn'      => 'mysql:host=localhost;dbname=admin_pu',// path/to/database
+    'hostname' => 'localhost',
+    'username' => 'root',
+    'password' => 'root',
+    'database' => 'admin_pu',
+    'dbdriver' => 'mysql',
     'dbprefix' => '',
     'pconnect' => FALSE,
     'db_debug' => (ENVIRONMENT !== 'production'),

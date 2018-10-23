@@ -220,7 +220,7 @@ class Pu extends CI_Controller {
 			}else echo "Error en Actualizacion::0";
 		}
 	}
-	public function update($usuario){
+	public function update($usuario,$print=false){
 		$out=(Object)array('id'=>-1,'nombre'=>"",'descripcion'=>"",'tipo'=>"");
 		$out->fecha=date("Y\-m\-d h:i:s");	
 
@@ -229,6 +229,8 @@ class Pu extends CI_Controller {
 			$out->mensajes[]=$this->output_('get',$message->tipo,array('id'=>$message->dato));	
 		
 		$this->mensaje->delete(array('estado'=>-$usuario));	
+		if($print)
+			echo json_encode($out);
 		return $out;
 	}
 	public function chat_edit()
