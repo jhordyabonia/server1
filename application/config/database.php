@@ -77,8 +77,8 @@ $active_record = TRUE;
 $db['default'] = array(
     'dsn'      => 'mysql:host=localhost;dbname=admin_pu',// path/to/database
     'hostname' => '',
-    'username' => 'admin_root',
-    'password' => '842036',
+    'username' => 'root',
+    'password' => 'root',
     'database' => '',
     'dbdriver' => 'pdo',
     'dbprefix' => '',

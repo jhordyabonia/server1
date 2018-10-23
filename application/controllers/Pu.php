@@ -199,7 +199,7 @@ class Pu extends CI_Controller {
 					if($t->tipo!=0)
 						$this->mensaje->update(array('estado'=>1),$msj_);
 				}	
-			$out[]=$this->update($chat);
+			$out[]=$this->update($chat['usuario']);
 			echo json_encode($out);
 		}else if($action=="delete")
 		{
@@ -221,14 +221,17 @@ class Pu extends CI_Controller {
 		}
 	}
 	public function update($usuario,$print=false){
-		$out=(Object)array('id'=>-1,'nombre'=>"",'descripcion'=>"",'tipo'=>"");
+		$this->load->model('pu/Mensaje_model','mensaje');
+		$out=(Object)array('id'=>-1,'nombre'=>"",'descripcion'=>"",'tipo'=>"","mensajes"=>[]);
 		$out->fecha=date("Y\-m\-d h:i:s");	
 
-		$messages=$this->mensaje->get_all(array('estado'=>-$usuario));
-		foreach($messages as $message)
-			$out->mensajes[]=$this->output_('get',$message->tipo,array('id'=>$message->dato));	
-		
-		$this->mensaje->delete(array('estado'=>-$usuario));	
+		$out->mensajes=$this->mensaje->get_all(array('chat'=>-$usuario));
+		if($out->mensajes)
+			foreach($out->mensajes as $k=>$message){
+				$result=$this->output_("get",$message->tipo,array('id'=>$message->dato),false);
+				$out->mensajes[$k]->dato=$result->data;	
+			}
+		$this->mensaje->delete(array('chat'=>-$usuario));	
 		if($print)
 			echo json_encode($out);
 		return $out;
@@ -692,12 +695,18 @@ class Pu extends CI_Controller {
 		#if($action==="edit") echo 0<($this->horario->update($horario,$id))?"Horario Actualizado::0":"Error en Actualizacion::0";
 		#else echo 0<($this->horario->insert($horario))?"Horario Registrado::0":"Error de Registro::0";
 	}
-	private function output_($action,$table,$data)
+	private function output_($action,$table,$data,$encode=true)
 	{
 		$out;$menssage="";
+		
+		if(substr($action,-1)==="s")
+			$action=substr($action,0,-1);
+		if(substr($table,-1)==="s")
+			$table=substr($table,0,-1);
+
 		if($action==="get"){	
-			$out=$this->$table->get($data['id']);
-		}if($action==="delete"){	
+			$data=(Array)$this->$table->get($data['id']);
+		}else if($action==="delete"){	
 			$out=$this->$table->delete($data['id']);
 			$out=$this->$table->get($data['id']);
 			if(!$out)$out=$data['id'];
@@ -725,7 +734,9 @@ class Pu extends CI_Controller {
 		$output=(Object)array('menssage'=>$menssage,'data'=>$data,'action'=>$action);
 
 		$this->output->set_content_type('application/json');
-		return json_encode($output);
+		if($encode)
+			return json_encode($output);
+		else return $output;
 	}
 	private function query($tabla,$asignatura,$callback)
 	{
