@@ -76,11 +76,11 @@ $query_builder = TRUE;
 $active_record = TRUE;
 $db['default'] = array(
     'dsn'      => 'mysql:host=localhost;dbname=admin_pu',// path/to/database
-    'hostname' => 'localhost',
-    'username' => 'root',
-    'password' => 'root',
-    'database' => 'admin_pu',
-    'dbdriver' => 'mysql',
+    'hostname' => '',
+    'username' => 'admin_root',
+    'password' => '842036',
+    'database' => '',
+    'dbdriver' => 'pdo',
     'dbprefix' => '',
     'pconnect' => FALSE,
     'db_debug' => (ENVIRONMENT !== 'production'),
