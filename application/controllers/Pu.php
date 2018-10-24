@@ -883,4 +883,17 @@ class Pu extends CI_Controller {
 	public function web($file="login.html"){
 		echo file_get_contents("./application/views/pages/examples/$file",true);
 	}
+	public function test()
+	{
+		$msj=array(
+			'chat'=>-7,
+			'usuario'=>0,
+			'tipo'=>'lecturas',
+			'dato'=>'2'
+		);
+
+		$this->load->model('pu/Mensaje_model','mensaje');
+		echo $this->mensaje->insert($msj)?
+			"ok":"error";
+	}
 }
