@@ -228,8 +228,10 @@ class Pu extends CI_Controller {
 		$out->mensajes=$this->mensaje->get_all(array('chat'=>-$usuario));
 		if($out->mensajes)
 			foreach($out->mensajes as $k=>$message){
-				$result=$this->output_("get",$message->tipo,array('id'=>$message->dato),false);
-				$out->mensajes[$k]->dato=$result->data;	
+				if(is_int($message->dato)){
+					$result=$this->output_("get",$message->tipo,array('id'=>$message->dato),false);
+					$out->mensajes[$k]->dato=$result->data;	
+				}
 			}
 		$this->mensaje->delete(array('chat'=>-$usuario));	
 		if($print)
@@ -888,8 +890,8 @@ class Pu extends CI_Controller {
 		$msj=array(
 			'chat'=>-7,
 			'usuario'=>0,
-			'tipo'=>'lecturas',
-			'dato'=>'2'
+			'tipo'=>'notificacion',
+			'dato'=>json_encode((Object)array('asignatura'=>"Notificacion I",'item'=>'2','type'=>'asignatura','data'=>"COPYRIGHT todos los derechos y contenidos intelectuales y gráficos dentro de este mail y sus adjuntos son propiedad de AMC Ecuador Cía. Ltda. Derechos reservados prohibida su copia parcial o total. La información contenida en este mensaje online es confidencial y destinada solamente para el uso de la persona o entidad mencionada. Si el receptor de este mensaje no es la persona de destino mencionada, cualquier divulgación, distribución o copia de la información contenida en este mensaje vía Internet se encuentra totalmente prohibida. Si usted recibe este mensaje por error, por favor notifique al emisor.usted recibe este mensaje por error, por favor notifique al emisor."))
 		);
 
 		$this->load->model('pu/Mensaje_model','mensaje');
