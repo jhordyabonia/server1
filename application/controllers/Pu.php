@@ -518,39 +518,39 @@ class Pu extends CI_Controller {
 		$u=$this->usuario->get($asignatura->usuario);
 		$asignatura->nota=$this->universidad->get($u->universidad)->nombre;
 		$asignatura->publico=$publico;
-		$id=$this->asignatura->insert($asignatura);
+		$id=$this->asignatura->insert((Array)$asignatura);
 
 		foreach($this->data['horarios'] as $index => $data)
 		{
 			$this->data['horarios'][$index]->id=null;
 			$this->data['horarios'][$index]->asignatura=$id;	
-			$this->horario->insert($this->data['horarios'][$index]);		
+			$this->horario->insert((Array)$this->data['horarios'][$index]);		
 		}
 		foreach($this->data['alertas'] as $index => $data)
 		{
 			$this->data['alertas'][$index]->id=null;
 			$this->data['alertas'][$index]->asignatura=$id;	
 			$this->data['alertas'][$index]->alerta=0;
-			$this->alerta->insert($this->data['alertas'][$index]);			
+			$this->alerta->insert((Array)$this->data['alertas'][$index]);			
 		}
 		foreach($this->data['apuntes'] as $index => $data)
 		{
 			$this->data['apuntes'][$index]->id=null;
 			$this->data['apuntes'][$index]->asignatura=$id;	
-			$this->apunte->insert($this->data['apuntes'][$index]);	
+			$this->apunte->insert((Array)$this->data['apuntes'][$index]);	
 		}		
 		foreach($this->data['lecturas'] as $index => $data)
 		{
 			$this->data['lecturas'][$index]->id=null;
 			$this->data['lecturas'][$index]->asignatura=$id;	
-			$this->lectura->insert($this->data['lecturas'][$index]);	
+			$this->lectura->insert((Array)$this->data['lecturas'][$index]);	
 		}	
 		foreach($this->data['calificables'] as $index => $data)
 		{
 			$this->data['calificables'][$index]->id=null;
 			$this->data['calificables'][$index]->nota="";
 			$this->data['calificables'][$index]->asignatura=$id;	
-			$this->calificable->insert($this->data['calificables'][$index]);
+			$this->calificable->insert((Array)$this->data['calificables'][$index]);
 		}			
 		if($compartir_con!=null)
 		{
@@ -561,7 +561,7 @@ class Pu extends CI_Controller {
 							'dato'=>json_encode($this->asignatura->get($id))
 						);
 			$this->load->model('pu/Mensaje_model','mensaje');
-			$id=$this->mensaje->insert($mensaje);
+			$id=$this->mensaje->insert((Array)$mensaje);
 			echo json_encode($this->mensaje->get($id)); 
 		}
 		else
