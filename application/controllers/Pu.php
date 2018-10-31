@@ -3,6 +3,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Pu extends CI_Controller {
 	var $empty="Para más opciones de búsqueda, vea Ayuda:Búsqueda.";
+	var $data= array(
+		'horarios'=>array(),
+		'alertas'=>array(),
+		'apuntes'=>array(),
+		'lecturas'=>array(),
+		'calificables'=>array()
+	);
 	function __construct()
 	{
 		parent::__construct();	
@@ -15,12 +22,6 @@ class Pu extends CI_Controller {
 		$this->load->model('pu/Apunte_model','apunte');
 		$this->load->model('pu/Lectura_model','lectura');
 		$this->load->model('pu/Calificable_model','calificable');
-
-		$data['horarios']=array();
-		$data['alertas']=array();
-		$data['apuntes']=array();
-		$data['lecturas']=array();
-		$data['calificables']=array();
 	}
 	public function index()
 	{	redirect("https://drive.google.com/file/d/0Bw7-14BZUCcvTThrMkZWbmlNVGM/view?usp=sharing");	}
@@ -428,7 +429,7 @@ class Pu extends CI_Controller {
 			$asignatura->publico=0;
 			$asignatura->nota="";
 			$asignatura->usuario=$usuario;
-			$id=$this->asignatura->insert($asignatura);
+			$id=$this->asignatura->insert((Array)$asignatura);
 
 			$asignatura->imagen = $this->findImg($asignatura->nombre);
 			$asignatura->descripcion=$this->getDescripcion($id);
@@ -441,7 +442,7 @@ class Pu extends CI_Controller {
 			$this->data['horarios'][$index]->id=null;
 			$this->data['horarios'][$index]->asignatura=$id;	
 			$this->data['horarios'][$index]->id=
-				$this->horario->insert($this->data['horarios'][$index]);		
+				$this->horario->insert((Array)$this->data['horarios'][$index]);		
 
 		}
 		foreach($this->data['alertas'] as $index => $data)
@@ -449,28 +450,28 @@ class Pu extends CI_Controller {
 			$this->data['alertas'][$index]->id=null;
 			$this->data['alertas'][$index]->asignatura=$id;			
 			$this->data['alertas'][$index]->id=
-				$this->alerta->insert($this->data['alertas'][$index]);			
+				$this->alerta->insert((Array)$this->data['alertas'][$index]);			
 		}
 		foreach($this->data['apuntes'] as $index => $data)
 		{
 			$this->data['apuntes'][$index]->id=null;
 			$this->data['apuntes'][$index]->asignatura=$id;	
 			$this->data['apuntes'][$index]->id=
-				$this->apunte->insert($this->data['apuntes'][$index]);	
+				$this->apunte->insert((Array)$this->data['apuntes'][$index]);	
 		}		
 		foreach($this->data['lecturas'] as $index => $data)
 		{
 			$this->data['lecturas'][$index]->id=null;
 			$this->data['lecturas'][$index]->asignatura=$id;	
 			$this->data['lecturas'][$index]->id=
-				$this->lectura->insert($this->data['lecturas'][$index]);	
+				$this->lectura->insert((Array)$this->data['lecturas'][$index]);	
 		}	
 		foreach($this->data['calificables'] as $index => $data)
 		{
 			$this->data['calificables'][$index]->id=null;
 			$this->data['calificables'][$index]->asignatura=$id;	
 			$this->data['calificables'][$index]->id=
-				$this->calificable->insert($this->data['calificables'][$index]);
+				$this->calificable->insert((Array)$this->data['calificables'][$index]);
 		}			
 		$asignatura->id=$id;
 		$message="";
@@ -893,6 +894,12 @@ class Pu extends CI_Controller {
 			'tipo'=>'notificacion',
 			'dato'=>json_encode((Object)array('asignatura'=>"Notificacion I",'item'=>'2','type'=>'asignatura','data'=>"COPYRIGHT todos los derechos y contenidos intelectuales y gráficos dentro de este mail y sus adjuntos son propiedad de AMC Ecuador Cía. Ltda. Derechos reservados prohibida su copia parcial o total. La información contenida en este mensaje online es confidencial y destinada solamente para el uso de la persona o entidad mencionada. Si el receptor de este mensaje no es la persona de destino mencionada, cualquier divulgación, distribución o copia de la información contenida en este mensaje vía Internet se encuentra totalmente prohibida. Si usted recibe este mensaje por error, por favor notifique al emisor.usted recibe este mensaje por error, por favor notifique al emisor."))
 		);
+		/*$msj=array(
+			'chat'=>-7,
+			'usuario'=>0,
+			'tipo'=>'asignatura',
+			'dato'=>2342
+		);*/
 
 		$this->load->model('pu/Mensaje_model','mensaje');
 		echo $this->mensaje->insert($msj)?
