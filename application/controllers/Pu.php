@@ -891,10 +891,17 @@ class Pu extends CI_Controller {
 		$msj=array(
 			'chat'=>-7,
 			'usuario'=>0,
+			'tipo'=>'file',
+			'dato'=>json_encode((Object)array('nombre'=>"server.js",'dato'=>"http://10.0.0.55/server1/pu/"))
+		);
+		/*
+		$msj=array(
+			'chat'=>-7,
+			'usuario'=>0,
 			'tipo'=>'notificacion',
 			'dato'=>json_encode((Object)array('asignatura'=>"Notificacion I",'item'=>'2','type'=>'asignatura','data'=>"COPYRIGHT todos los derechos y contenidos intelectuales y gráficos dentro de este mail y sus adjuntos son propiedad de AMC Ecuador Cía. Ltda. Derechos reservados prohibida su copia parcial o total. La información contenida en este mensaje online es confidencial y destinada solamente para el uso de la persona o entidad mencionada. Si el receptor de este mensaje no es la persona de destino mencionada, cualquier divulgación, distribución o copia de la información contenida en este mensaje vía Internet se encuentra totalmente prohibida. Si usted recibe este mensaje por error, por favor notifique al emisor.usted recibe este mensaje por error, por favor notifique al emisor."))
 		);
-		/*$msj=array(
+		$msj=array(
 			'chat'=>-7,
 			'usuario'=>0,
 			'tipo'=>'asignatura',
@@ -904,5 +911,46 @@ class Pu extends CI_Controller {
 		$this->load->model('pu/Mensaje_model','mensaje');
 		echo $this->mensaje->insert($msj)?
 			"ok":"error";
+	}
+
+	public function sendmail()
+	{
+		$this->load->library('email');
+		//$config['protocol']    = 'smtp';
+		//$config['smtp_host']    = 'ssl://smtp.gmail.com';
+		$config['protocol'] = 'ssmtp';
+		$config['smtp_host'] = 'ssl://ssmtp.gmail.com';
+		$config['smtp_port']    = '465';
+		$config['smtp_timeout'] = '7';
+		$config['smtp_user']    = 'jeigl7@gmail.com';
+		$config['smtp_pass']    = '************';
+		$config['charset']    = 'utf-8';
+		$config['newline']    = "\r\n";
+		$config['mailtype'] = 'text'; // or html
+		$config['validation'] = TRUE; // bool whether to validate email or not      
+		$this->email->initialize($config);
+		$this->email->from('jeigl7@gmail.com', 'sender_name');
+		$this->email->to('jhordy.abonia@gmail.com'); 
+		$this->email->subject('Email Test');
+		$this->email->message('Testing the email class.');  
+		$this->email->send();
+		echo $this->email->print_debugger();
+		/*
+		$this->load->library('email');
+		$config['protocol'] = 'sendmail';
+		$config['mailpath'] = '/usr/sbin/sendmail';
+		$config['charset'] = 'utf-8';
+		$config['mailtype'] = 'html';
+		$config['wordwrap'] = TRUE;
+		$this->email->initialize($config);
+		$this->email->from('contacto@123seller.azurewebsites.net', 'Seller Online');
+		$this->email->to('jeigl7@gmail.com');
+		$this->email->subject("Bienvenido a Seller Online");
+		$this->email->message("hola");
+		if($this->email->send())
+			echo "ok";
+			else {
+				$this->email
+			}*/
 	}
 }
