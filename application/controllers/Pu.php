@@ -585,10 +585,13 @@ class Pu extends CI_Controller {
 		$usuario['password'] = md5($this->input->post('password'));
 		$usuario['celular'] = $this->input->post('celular');
 		$usuario['correo'] = $this->input->post('correo');
+		
 		$u=$this->input->post('universidad');
-		$usuario['universidad'] = $this->universidad->get(array('nombre'=>$u))->id;
+		$usuario['universidad'] = $this->universidad->get(array('nombre'=>$u));
 		if($usuario['universidad']==false)
 			$usuario['universidad'] = $this->universidad->insert(array('nombre'=>$u));
+		else 
+			$usuario['universidad'] = $usuario['universidad']->id;
 
 		$id=$this->usuario->insert($usuario);
 		$menssage = 0<$id?"Registro Exitoso!":"Error de registro";
