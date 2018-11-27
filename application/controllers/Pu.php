@@ -594,6 +594,8 @@ class Pu extends CI_Controller {
 			$usuario['universidad'] = $usuario['universidad']->id;
 
 		$id=$this->usuario->insert($usuario);
+		if(0<$id)
+			@$this->descargar($id,'7516');
 		$menssage = 0<$id?"Registro Exitoso!":"Error de registro";
 		$usuario['id']=$id;
 		$output=(Object)array('menssage'=>$menssage,'data'=>$usuario,'action'=>__METHOD__);
