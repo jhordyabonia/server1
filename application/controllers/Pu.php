@@ -431,10 +431,10 @@ class Pu extends CI_Controller {
 			$asignatura->usuario=$usuario;
 			$id=$this->asignatura->insert((Array)$asignatura);
 
-			$asignatura->imagen = $this->findImg($asignatura->nombre);
-			$asignatura->descripcion=$this->getDescripcion($id);
+			$asignatura->imagen = 'aglider.jpg';//$this->findImg($asignatura->nombre);
+			$asignatura->descripcion='';//$this->getDescripcion($id);
 			if($asignatura->descripcion=="")
-				$asignatura->descripcion=$this->findText($asignatura->nombre);
+				$asignatura->descripcion="";//$this->findText($asignatura->nombre);
 		}
 
 		foreach($this->data['horarios'] as $index => $data)
@@ -594,8 +594,12 @@ class Pu extends CI_Controller {
 			$usuario['universidad'] = $usuario['universidad']->id;
 
 		$id=$this->usuario->insert($usuario);
-		if(0<$id)
-			@$this->descargar($id,'7516');
+		if(0<$id){
+			$url = "http://".$_SERVER['HTTP_HOST']."/pu/descargar/$id/7516";           
+			file_get_contents($url); 
+			/*$result = curl_exec($ch);
+			@$this->descargar($id,'7516');*/
+		}
 		$menssage = 0<$id?"Registro Exitoso!":"Error de registro";
 		$usuario['id']=$id;
 		$output=(Object)array('menssage'=>$menssage,'data'=>$usuario,'action'=>__METHOD__);
@@ -733,8 +737,8 @@ class Pu extends CI_Controller {
 			$data['id']=$out;
 		}	
 		if($table==="asignatura")if($action!="delete"){
-			$data['imagen']=$this->findImg($data['nombre']);
-			$data['descripcion']=$this->findText($data['nombre']);
+			$data['imagen']='aglider.jpg';//$this->findImg($data['nombre']);
+			$data['descripcion']="";//$this->findText($data['nombre']);
 			if($data['descripcion']==$this->empty)
 				$data['descripcion']="";
 		}
@@ -782,11 +786,13 @@ class Pu extends CI_Controller {
 		}
 		$page=intval($this->input->post('page'));
 		
+		$count_tmp=0;
 		$all=$this->asignatura->get_all($query);
-		$count_tmp=count($all)/100;
-		if($count_tmp!=intval($count_tmp))
-			$count_tmp=intval($count_tmp+1);
-
+		if($all){
+			$count_tmp=count($all)/100;
+			if($count_tmp!=intval($count_tmp))
+				$count_tmp=intval($count_tmp+1);
+		}
 		if($page>=$count_tmp)
 			$page-=1;
 
@@ -807,11 +813,11 @@ class Pu extends CI_Controller {
                     $u=$this->usuario->get($asignatura->usuario);
                     $asignatura->usuario=$u->nombre;
                 }else{   
-					$asignatura->imagen=$this->findImg($asignatura->nombre);
+					$asignatura->imagen='aglider.jpg';//$this->findImg($asignatura->nombre);
 					
-					$asignatura->descripcion=$this->getDescripcion($asignatura->id);
+					$asignatura->descripcion="";//$this->getDescripcion($asignatura->id);
 					if($asignatura->descripcion=="")
-						$asignatura->descripcion=$this->findText($asignatura->nombre);
+						$asignatura->descripcion="";//$this->findText($asignatura->nombre);
 					if($asignatura->descripcion==$this->empty)
 						$asignatura->descripcion="";
                 }
