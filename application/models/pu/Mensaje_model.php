@@ -42,6 +42,7 @@ class Mensaje_model extends CI_Model {
                 $this->db->where(self::PRI_INDEX, $where);
             }
         }
+       $this->db->order_by('fecha', 'ASC');
         $result = $this->db->get()->result();
         if ($result)
         {   return $result; }

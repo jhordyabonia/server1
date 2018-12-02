@@ -16,8 +16,6 @@ CREATE TABLE `pu_alerta` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `pu_alerta` (`id`, `nombre`, `fecha`, `hora`, `asignatura`, `alerta`) VALUES
-(1,	'test one',	'27-11-2018',	'22:19',	7519,	1);
 
 DROP TABLE IF EXISTS `pu_apunte`;
 CREATE TABLE `pu_apunte` (
@@ -4438,12 +4436,6 @@ CREATE TABLE `pu_chat` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `pu_chat` (`id`, `tipo`, `descripcion`, `nombre`, `usuario`) VALUES
-(1,	0,	'this',	'nuevo group',	16),
-(2,	1,	'',	'_3158241412_3158241412_',	2),
-(3,	1,	'',	'_3158241412_1234567890_',	8),
-(4,	1,	'',	'_3158241412_1111111111_',	7),
-(5,	0,	'this is the description the this group',	'this is muy group new',	2);
 
 DROP TABLE IF EXISTS `pu_estado_mensaje`;
 CREATE TABLE `pu_estado_mensaje` (
@@ -6896,21 +6888,26 @@ CREATE TABLE `pu_mensaje` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `pu_mensaje` (`id`, `usuario`, `chat`, `tipo`, `dato`, `estado`, `fecha`) VALUES
-(1,	16,	1,	'mensaje',	'Grupo iniciado',	0,	'2018-11-27 20:29:01'),
-(2,	2,	2,	'inicio',	'Inicio chat',	0,	'2018-11-29 13:14:26'),
-(3,	2,	2,	'inicio',	'Inicio chat',	0,	'2018-11-29 13:14:26'),
-(4,	2,	2,	'mensaje',	'hola?',	0,	'2018-11-29 13:15:29'),
-(5,	8,	3,	'inicio',	'Inicio chat',	1,	'2018-11-29 13:15:48'),
-(6,	2,	3,	'inicio',	'Inicio chat',	0,	'2018-11-29 13:15:48'),
-(7,	7,	4,	'inicio',	'Inicio chat',	1,	'2018-11-29 13:17:49'),
-(8,	2,	4,	'inicio',	'Inicio chat',	0,	'2018-11-29 13:17:49'),
-(9,	2,	4,	'mensaje',	'hola',	0,	'2018-11-29 13:17:58'),
-(10,	2,	4,	'mensaje',	'cómo vas?',	0,	'2018-11-29 13:18:06'),
-(11,	2,	5,	'mensaje',	'Grupo iniciado',	0,	'2018-11-29 13:19:10'),
-(12,	2,	5,	'mensaje',	'y aquí va la retaila de mensajes',	0,	'2018-11-29 13:19:26'),
-(20,	2,	2,	'asignatura',	'{\"id\":\"7531\",\"usuario\":\"2\",\"codigo\":\"801008M\",\"nombre\":\"MATEM\\u00c1TICA B\\u00c1SICA\",\"creditos\":\"3\",\"nota\":\"Academic Glider\",\"publico\":\"2\"}',	0,	'2018-11-30 03:34:51'),
-(21,	2,	2,	'mensaje',	'tier',	0,	'2018-11-30 03:35:40');
+
+DROP TABLE IF EXISTS `pu_mensaje_plantilla`;
+CREATE TABLE `pu_mensaje_plantilla` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tipo` varchar(30) NOT NULL,
+  `dato` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO `pu_mensaje_plantilla` (`id`, `tipo`, `dato`) VALUES
+(1,	'asignatura',	'{\"id\":\"7507\",\"usuario\":\"1\",\"codigo\":\"505011M\",\"nombre\":\"PIANO COMPLEMENTARIO I\",\"creditos\":\"2\",\"nota\":\"Academic Glider\",\"publico\":\"2\"}'),
+(2,	'command',	'{\"command\":\"style|vibrate|drop_mode|sound\",\"value\":\"colors[n]|(true|false)\"}'),
+(3,	'file',	'{\"nombre\":\"server.js\",\"dato\":\"http:\\/\\/10.0.0.55\\/server1\\/pu\\/\"}'),
+(4,	'notificacion',	'{\"asignatura\":\"TITULO\",\"data\":\"CONTENT\",\"type\":\"TYPE\"}'),
+(5,	'permissions',	'{\"permisos\":\"add_asignatura,add_horario,add_alerta,add_lectura,add_calificable,add_apunute,del_asignatura,del_horario,del_alerta,del_lectura,del_calificable,del_apunute,,edit_asignatura,edit_horario,edit_alerta,edit_lectura,edit_calificable,edit_apunute,add_group,add_chat,change_color,change_user,change_cel,change_universidad\"}'),
+(6,	'mensaje',	'mensaje'),
+(7,	'inicio',	'mensaje'),
+(8,	'edicion',	'[autogenered]'),
+(9,	'horarios',	'{\"id\":\"2396\",\"asignatura\":\"7505\",\"dia\":\"Lunes\",\"hora\":\"7:00\",\"duracion\":\"10\",\"ubicacion\":\"SIN ESPACIO -- PR \\nMAR: 7:00-17:00\"}'),
+(10,	'alertas',	'{\"id\":\"264\",\"nombre\":\"cambiar icono agregar compañero\",\"fecha\":\"13-10-2018\",\"hora\":\"13:15\",\"asignatura\":\"7513\",\"alerta\":\"0\"}');
 
 DROP TABLE IF EXISTS `pu_publico_asignatura`;
 CREATE TABLE `pu_publico_asignatura` (
@@ -6972,9 +6969,9 @@ CREATE TABLE `pu_usuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `pu_usuario` (`id`, `password`, `nombre`, `celular`, `correo`, `foto`, `universidad`, `descarga`, `permisos`, `token`) VALUES
-(2,	'e10adc3949ba59abbe56e057f20f883e',	'Academic Glider',	'3158241412',	'jeigl7@gmail.com',	'glider.jpg',	1,	3,	'     download_asignatura,share_asignatura,add_asignatura,add_horario,add_alerta,add_lectura,add_calificable,add_apunute,del_asignatura,del_horario,del_alerta,del_lectura,del_calificable,del_apunute,,edit_asignatura,edit_horario,edit_alerta,edit_lectura,edit_calificable,edit_apunute,add_group,add_chat,change_color,change_user,change_cel,change_universidad',	'token notification'),
+(2,	'e10adc3949ba59abbe56e057f20f883e',	'Academic Glider',	'3158241412',	'jeigl7@gmail.com',	'glider.jpg',	1,	3,	'download_asignatura,share_asignatura,add_asignatura,add_horario,add_alerta,add_lectura,add_calificable,add_apunute,del_asignatura,del_horario,del_alerta,del_lectura,del_calificable,del_apunute,,edit_asignatura,edit_horario,edit_alerta,edit_lectura,edit_calificable,edit_apunute,add_group,add_chat,change_color,change_user,change_cel,change_universidad',	'eyonoeksHZE:APA91bEjcMhUHwd_xcd7044hQnrqm__nCSBfygarzCxO4MG-1XZ_Xvv0yj9zOJ6uakw8FyelZNpzI5-e7ccRLFoqcTYYTvUe_s8n42cMcesWYKi8_V684Ka5C7pnNYBqYYGA8hEpa7jI'),
 (7,	'e10adc3949ba59abbe56e057f20f883e',	'Beta exodo 7',	'1111111111',	'betaexodo@test.co',	'glider.jpg',	2,	3,	'     download_asignatura,share_asignatura,add_asignatura,add_horario,add_alerta,add_lectura,add_calificable,add_apunute,del_asignatura,del_horario,del_alerta,del_lectura,del_calificable,del_apunute,,edit_asignatura,edit_horario,edit_alerta,edit_lectura,edit_calificable,edit_apunute,add_group,add_chat,change_color,change_user,change_cel,change_universidad',	'token notification'),
-(8,	'e10adc3949ba59abbe56e057f20f883e',	'test tester',	'1234567890',	't@t.t',	'glider.jpg',	2,	3,	'     download_asignatura,share_asignatura,add_asignatura,add_horario,add_alerta,add_lectura,add_calificable,add_apunute,del_asignatura,del_horario,del_alerta,del_lectura,del_calificable,del_apunute,,edit_asignatura,edit_horario,edit_alerta,edit_lectura,edit_calificable,edit_apunute,add_group,add_chat,change_color,change_user,change_cel,change_universidad',	'token notification'),
+(8,	'e10adc3949ba59abbe56e057f20f883e',	'test tester',	'1234567890',	't@t.t',	'glider.jpg',	2,	3,	'     download_asignatura,share_asignatura,add_asignatura,add_horario,add_alerta,add_lectura,add_calificable,add_apunute,del_asignatura,del_horario,del_alerta,del_lectura,del_calificable,del_apunute,,edit_asignatura,edit_horario,edit_alerta,edit_lectura,edit_calificable,edit_apunute,add_group,add_chat,change_color,change_user,change_cel,change_universidad',	'cihbMEDxwUA:APA91bFlWcQe6mciwlpeo6V3pa34jciXqVcb-bTL5EPbensUX07inGU9S6FM2UcKZhArh9xuvv086TFf6TktcXBSGhSmiHZBRPNbdr4-eK9qmj-8LqRZahGpD-m3tr1cGMyYAf8iLpqO'),
 (9,	'e10adc3949ba59abbe56e057f20f883e',	'tester levitico',	'5555555555',	'5@5.5',	'glider.jpg',	2,	3,	'     download_asignatura,share_asignatura,add_asignatura,add_horario,add_alerta,add_lectura,add_calificable,add_apunute,del_asignatura,del_horario,del_alerta,del_lectura,del_calificable,del_apunute,,edit_asignatura,edit_horario,edit_alerta,edit_lectura,edit_calificable,edit_apunute,add_group,add_chat,change_color,change_user,change_cel,change_universidad',	'token notification'),
 (12,	'e10adc3949ba59abbe56e057f20f883e',	'jhon die',	'7777777777',	'z@z.z',	'glider.jpg',	1,	3,	'     download_asignatura,share_asignatura,add_asignatura,add_horario,add_alerta,add_lectura,add_calificable,add_apunute,del_asignatura,del_horario,del_alerta,del_lectura,del_calificable,del_apunute,,edit_asignatura,edit_horario,edit_alerta,edit_lectura,edit_calificable,edit_apunute,add_group,add_chat,change_color,change_user,change_cel,change_universidad',	'token notification'),
 (13,	'e10adc3949ba59abbe56e057f20f883e',	'666 666 6666',	'6666666666',	'6@6.6',	'glider.jpg',	1,	3,	'     download_asignatura,share_asignatura,add_asignatura,add_horario,add_alerta,add_lectura,add_calificable,add_apunute,del_asignatura,del_horario,del_alerta,del_lectura,del_calificable,del_apunute,,edit_asignatura,edit_horario,edit_alerta,edit_lectura,edit_calificable,edit_apunute,add_group,add_chat,change_color,change_user,change_cel,change_universidad',	'token notification'),
@@ -6984,6 +6981,6 @@ INSERT INTO `pu_usuario` (`id`, `password`, `nombre`, `celular`, `correo`, `foto
 (17,	'e10adc3949ba59abbe56e057f20f883e',	'jhon doe  t',	'7894561230',	'g@g.g',	'glider.jpg',	1,	3,	'add_asignatura,add_horario,add_alerta,add_lectura,add_calificable,add_apunute,del_asignatura,del_horario,del_alerta,del_lectura,del_calificable,del_apunute,,edit_asignatura,edit_horario,edit_alerta,edit_lectura,edit_calificable,edit_apunute,add_group,add_chat,change_color,change_user,change_cel,change_universidad',	'token notification'),
 (18,	'e10adc3949ba59abbe56e057f20f883e',	'jhon fie r',	'1472580369',	'd@d.d',	'glider.jpg',	1,	3,	'add_asignatura,add_horario,add_alerta,add_lectura,add_calificable,add_apunute,del_asignatura,del_horario,del_alerta,del_lectura,del_calificable,del_apunute,,edit_asignatura,edit_horario,edit_alerta,edit_lectura,edit_calificable,edit_apunute,add_group,add_chat,change_color,change_user,change_cel,change_universidad',	'token notification'),
 (20,	'e10adc3949ba59abbe56e057f20f883e',	'jhon doe t',	'3692580147',	'h@h.h',	'glider.jpg',	1,	3,	'add_asignatura,add_horario,add_alerta,add_lectura,add_calificable,add_apunute,del_asignatura,del_horario,del_alerta,del_lectura,del_calificable,del_apunute,,edit_asignatura,edit_horario,edit_alerta,edit_lectura,edit_calificable,edit_apunute,add_group,add_chat,change_color,change_user,change_cel,change_universidad',	'token notification'),
-(21,	'e10adc3949ba59abbe56e057f20f883e',	'jhon doe i',	'3571592514',	'd@d.d',	'glider.jpg',	1,	3,	'add_asignatura,add_horario,add_alerta,add_lectura,add_calificable,add_apunute,del_asignatura,del_horario,del_alerta,del_lectura,del_calificable,del_apunute,,edit_asignatura,edit_horario,edit_alerta,edit_lectura,edit_calificable,edit_apunute,add_group,add_chat,change_color,change_user,change_cel,change_universidad',	'token notification');
+(21,	'e10adc3949ba59abbe56e057f20f883e',	'jhon doe i',	'3571592514',	'd@d.d',	'glider.jpg',	1,	3,	'add_asignatura,add_horario,add_alerta,add_lectura,add_calificable,add_apunute,del_asignatura,del_horario,del_alerta,del_lectura,del_calificable,del_apunute,,edit_asignatura,edit_horario,edit_alerta,edit_lectura,edit_calificable,edit_apunute,add_group,add_chat,change_color,change_user,change_cel,change_universidad',	'');
 
--- 2018-12-01 00:53:52
+-- 2018-12-02 22:26:07

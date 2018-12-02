@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
+define( 'API_ACCESS_KEY', 'AIzaSyAvSJJZHWp1Djo5rD45oZix57xc35KgeUo' );
 class Pu extends CI_Controller {
 	var $empty="Para más opciones de búsqueda, vea Ayuda:Búsqueda.";
 	var $data= array(
@@ -22,6 +22,7 @@ class Pu extends CI_Controller {
 		$this->load->model('pu/Apunte_model','apunte');
 		$this->load->model('pu/Lectura_model','lectura');
 		$this->load->model('pu/Calificable_model','calificable');
+		$this->output->set_content_type('application/json');
 	}
 	public function index()
 	{	redirect("https://drive.google.com/file/d/0Bw7-14BZUCcvTThrMkZWbmlNVGM/view?usp=sharing");	}
@@ -181,6 +182,7 @@ class Pu extends CI_Controller {
 			}else echo json_encode($chat);//"Error agregando chat";
 		}else if($action=="get")
 		{
+			$last_msj=$this->input->post('last_msj');
 			$chat['estado <>']="-1";
 			//$chat['id >']=$last_msj;
 			$mensajes=$this->mensaje->get_all($chat);
@@ -188,19 +190,32 @@ class Pu extends CI_Controller {
 			foreach($mensajes as $mensaje)
 				$tmp_ids[$mensaje->chat]=$mensaje->fecha;
 			$out=array();
-			$last_msj=$this->input->post('last_msj');
-			if($last_msj!="0")
-				foreach($tmp_ids as $k=>$v)
-				{
+
+			if($last_msj!="0"){
+				foreach($tmp_ids as $k=>$v){
 					$msj_=array('id >'=>$last_msj,'estado'=>"0",'chat'=>$k,'usuario <>'=>$chat['usuario']);
 					$t=$this->chat->get($k);
 					$t->mensajes=$this->mensaje->get_all($msj_);
 					$t->fecha=$v;
 					$out[]=$t;
 					if($t->tipo!=0)
-						$this->mensaje->update(array('estado'=>1),$msj_);
+						$this->mensaje->update(array('estado'=>1),$msj_);					
 				}	
+			}else{
+				$o=0;
+				foreach($tmp_ids as $kk=>$v)
+					$o=$kk;
+				if($o!=0){
+					$k=$tmp_ids[$o];
+					$t=$this->chat->get($o);
+					$msj_=array('fecha >'=>$k,'usuario <>'=>$chat['usuario']);
+					$t->mensajes=$this->mensaje->get_all($msj_);
+					$t->fecha=$k;
+					$out[]=$t;
+				}
+			}						
 			$out[]=$this->update($chat['usuario']);
+			//$out[]=$this->input->post();
 			echo json_encode($out);
 		}else if($action=="delete")
 		{
@@ -307,6 +322,32 @@ class Pu extends CI_Controller {
 		}
 		$id=$this->mensaje->insert($mensaje);
 		echo 0<$id?json_encode($this->mensaje->get($id)):"";
+
+		$registatoin_ids = $this->getIds($mensaje['chat']);
+		$message = array('chat'=>$mensaje['chat']);
+		$this->send_notification($registatoin_ids,$message);
+	}
+	public function testR(){
+
+		$registatoin_ids = $this->getIds(6);
+		$message = array('status'=>1);
+		echo "<PRE>";
+	//	var_dump($registatoin_ids,$message);
+		var_dump($this->send_notification($registatoin_ids,$message));
+	}
+	private function getIds($chat){
+		$chat=$chat<0?-1*$chat:$chat;
+		$query = "SELECT u.token
+					FROM pu_mensaje m
+					JOIN pu_usuario u on u.id = m.usuario
+					WHERE m.chat = $chat
+					GROUP BY u.token;";
+		$result = $this->db->query($query)->result();
+		$out=[];
+		if(is_array($result))
+			foreach($result as $r)
+				$out[]=$r->token;
+		return ($out);
 	}
 	public function contactos()
 	{
@@ -597,7 +638,8 @@ class Pu extends CI_Controller {
 		if(0<$id){
 			$url = "http://".$_SERVER['HTTP_HOST']."/pu/descargar/$id/7516";           
 			file_get_contents($url); 
-			/*$result = curl_exec($ch);
+			/*
+			$result = curl_exec($ch);
 			@$this->descargar($id,'7516');*/
 		}
 		$menssage = 0<$id?"Registro Exitoso!":"Error de registro";
@@ -832,62 +874,57 @@ class Pu extends CI_Controller {
         }
 		echo json_encode($this->data);
 	}
-	public function getDescripcion($id,$print=false)
-	{
-        $date = (new DateTime())->format('Y-m-d');
-		$out[]=$this->alerta->get(array('asignatura'=>$id,'alerta'=>1,'fecha >='=>"'$date'"));
-		$out[]=$this->lectura->get(array('asignatura'=>$id));
-		$out[]=$this->alerta->get(array('asignatura'=>$id));
-		$_out="";
-		foreach($out as $d)if($d){			
-			$_out.=$d->nombre."  \n";
-			if(isset($d->descripcion))
-				$_out.=$d->descripcion."\n";
+	public function setToken(){
+
+		$id=$this->input->post('id');
+		$token=$this->input->post('token');
+		$this->output->set_content_type('application/json');
+		if(strlen($token)<100){
+			$output=(Object)array('menssage'=>"Token error",'data'=>null,'action'=>'');
+			echo (json_encode($output));
+			return;
+		}	
+		$out=$this->usuario->update(array('token'=>$token),$id);
+		if($out>0){
+			$output=(Object)array('menssage'=>"Token changed successs",'data'=>null,'action'=>'');
+			echo (json_encode($output));
+			return;
 		}
-        if($print){
-		echo "<PRE>$_out<br>";
-		print_r($out);
-		echo "</PRE><br>";
-		}
-		return $_out;
+
+		$output=(Object)array('menssage'=>"Online",'data'=>$token,'action'=>$id);
+		echo (json_encode($output));
+
 	}
-    public function findImg($q="español",$print=false)
-    {
-        $q=urlencode($q);
-        $var=file_get_contents("https://www.google.com/search?biw=1366&bih=671&tbs=itp%3Aclipart&tbm=isch&sa=1&ei=dSuZW-vwHZK85gKsxLuoCA&q=+$q&oq=+$q&gs_l=img.3..0i67k1l4j0j0i67k1l4j0.6339.6339.0.6524.1.1.0.0.0.0.170.170.0j1.1.0....0...1c.1.64.img..0.1.170....0.bau4MOhaStY",true);
-        $long=strlen($var)/50;
-        $ram=rand($long,4*$long);
-        $ipos=strpos($var,"<img ")+$ram;
-        $start=strpos($var,"src=\"",$ipos)+strlen("src=\"");
-        $end=strpos($var,"\"",$start);
-        $result=substr($var,$start,$end-$start); 
-        if($print)echo"<img src='$result'> <br>$ram";
-        return $result;
-    }
-    public function findText($qq="español",$print=false)
-    {
-        $q=trim($qq);
-        $q=urlencode($q);
-        $var=file_get_contents("https://es.wikipedia.org/w/index.php?search=$q",true);
-        $ipos=strpos($var,"<p");
-        $start=strpos($var,">",$ipos)+strlen(">");
-        $end=strpos($var,"</p>",$start);
-        $result=substr($var,$start,$end-$start); 
-        $result=strip_tags(trim($result));
-        if(($result==$this->empty)){     
-            if(!strpos($q,"+")) $result = $this->empty;
-            else foreach(explode("+",$q) as $r){
-                if(strlen($r)>2){
-                    $out=$this->findText($r);
-                    if(($out==$this->empty))
-                        continue;
-                    $result = $out;
-                }
-            }
-        }
-        if($print) echo $result;
-        return $result;
-    }
+	public function send_notification($registatoin_ids, $message) {
+
+		$url = 'https://android.googleapis.com/gcm/send';
+
+		$fields = array(
+			'registration_ids' => $registatoin_ids,
+			'data' => $message,
+		);	
+		$headers = array(
+			'Authorization: key=' . API_ACCESS_KEY,
+			'Content-Type: application/json'
+		);
+
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));	
+		$result = curl_exec($ch);
+
+		if ($result === FALSE) {
+			die('Curl failed: ' . curl_error($ch));
+		}
+
+		curl_close($ch);
+		return $result;
+	}
+
 	public function sql()
 	{
 		$query =$this->db->query($this->input->post('script'));
@@ -895,6 +932,7 @@ class Pu extends CI_Controller {
 		//SYSTEM_WS{"url":"sql","script":"SELECT * FROM  `pu_usuario`LIMIT 0 , 30"}           
 	}
 	public function web($file="login.html"){
+		$this->output->set_content_type('application/html');
 		echo file_get_contents("./application/views/pages/examples/$file",true);
 	}
 	public function test()
